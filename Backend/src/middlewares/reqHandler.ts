@@ -12,8 +12,7 @@ const handler = (app: Application, db: PoolClient | undefined) => {
   }
   app.use(express.json(), bodyParser.urlencoded({ extended: true }));
   app.use(bodyParser.json());
-    app.use("/api", router);
-
+  app.use("/api", router);
 };
 
 export default handler;

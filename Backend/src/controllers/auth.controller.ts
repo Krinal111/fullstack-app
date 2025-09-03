@@ -3,10 +3,10 @@ import { getUserByEmail, createUser, getRoleByName, getRoleById } from "../sql";
 import { hashPassword, compareHashPassword } from "../helpers/functions";
 import { generateToken } from "../middlewares/auth";
 import { jwtCreds } from "../config/config";
-import { CUSTOMER } from "../constants/Roles";
 import { verify } from "jsonwebtoken";
+import { ROLES } from "../constants/Roles";
 
-const register = async (req: Request) => {
+const registerCustomer = async (req: Request) => {
   try {
     const db = req.app.locals.db;
     const { name, email, password, phone_number } = req.body;
@@ -17,7 +17,7 @@ const register = async (req: Request) => {
     }
 
     const hashedPassword = await hashPassword(password);
-    const customerRole = await getRoleByName(db, CUSTOMER);
+    const customerRole = await getRoleByName(db, ROLES.CUSTOMER);
 
     const newUser = await createUser(db, {
       name,
@@ -49,6 +49,14 @@ const login = async (req: Request) => {
     }
 
     const match = await compareHashPassword(password, user.password);
+    console.log(
+      "match,email,password",
+      match,
+      email,
+      password,
+      user.password,
+      "::"
+    );
     if (!match) {
       return { status: false, statusCode: 401, message: "Incorrect password" };
     }
@@ -104,7 +112,7 @@ const login = async (req: Request) => {
   }
 };
 
-const   refreshToken = async (req: Request) => {
+const refreshToken = async (req: Request) => {
   try {
     const refreshToken = req?.headers?.authorization?.split(" ")[1];
     if (!refreshToken) {
@@ -156,4 +164,4 @@ const   refreshToken = async (req: Request) => {
     };
   }
 };
-export { register, login, refreshToken };
+export { registerCustomer, login, refreshToken };

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { login, refreshToken, register } from "../controllers";
+import { login, refreshToken, registerCustomer } from "../controllers";
 import express from "express";
 const ApiService = {
   loginUser: async (req: Request, res: Response) => {
@@ -7,7 +7,7 @@ const ApiService = {
     res.status(resp.statusCode).json(resp);
   },
   registerCustomer: async (req: Request, res: Response) => {
-    const resp = await register(req);
+    const resp = await registerCustomer(req);
     res.status(resp.statusCode).json(resp);
   },
   RefreshToken: async (req: Request, res: Response) => {

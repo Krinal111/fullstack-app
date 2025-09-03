@@ -1,13 +1,21 @@
+import { Request } from "express";
+import { ROLES } from "../constants/Roles";
+
 export interface User {
   id: number;
-  username: string;
-  password?: string;
-  name?: string;
+  name: string;
   email: string;
-  phone?: string;
+  phone_number: string;
   role_id: number;
-  created_at: Date;
-  updated_at: Date;
+  role?: string;
+  password?: string;
+  created_at?: Date;
+  updated_at?: Date;
+}
+
+export interface AuthRequest extends Request {
+  user?: User;
+  userRole?: Role;
 }
 
 export interface Role {
@@ -17,3 +25,5 @@ export interface Role {
   created_at: Date;
   updated_at: Date;
 }
+
+export type RoleType = (typeof ROLES)[keyof typeof ROLES];

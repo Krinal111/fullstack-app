@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 export const hashPassword = (rawPassword: string): Promise<string> => {
   return new Promise((resolve, reject) => {
@@ -7,7 +7,7 @@ export const hashPassword = (rawPassword: string): Promise<string> => {
         console.error("Error hashing password:", err);
         reject(err);
       } else {
-        resolve(hash);
+        resolve(hash as string);
       }
     });
   });
@@ -20,4 +20,3 @@ export const compareHashPassword = async (
   const result = await bcrypt.compare(rawPassword, hashString);
   return result;
 };
-
