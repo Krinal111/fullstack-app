@@ -1,15 +1,12 @@
 import { Request, Response } from "express";
-import express from "express";
-import { registerVendor } from "../controllers/admin.controller";
-import { requireAdmin, verifyToken } from "../middlewares/auth";
-
-const ApiService = {
-  registerVendor: async (req: Request, res: Response) => {
-    const resp = await registerVendor(req);
+import { addVendor } from "../controllers/admin.controller";
+import express from 'express'
+export const adminRouter = express.Router();
+const ApiService ={
+    AddVendor: async (req: Request, res: Response) => {
+    const resp = await addVendor(req);
     res.status(resp.statusCode).json(resp);
   },
-};
-
-export const adminRouter = express.Router();
-adminRouter.use(verifyToken);
-adminRouter.post("/register-vendor", requireAdmin, ApiService.registerVendor);
+}
+adminRouter
+  .post("/add-vendor", ApiService.AddVendor); // Only admin can access due to AuthorizeRole config

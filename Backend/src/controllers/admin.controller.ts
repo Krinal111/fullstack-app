@@ -1,50 +1,58 @@
 import { Request } from "express";
-import { getUserByEmail, createUser, getRoleByName } from "../sql";
-import { hashPassword } from "../helpers/functions";
 import { ROLES } from "../constants/Roles";
+import { hashPassword } from "../helpers/functions";
+import { createUser, createVendor, getUserByPhone } from "../sql";
 
-const registerVendor = async (req: Request) => {
+const addVendor = async (req: Request) => {
   try {
     const db = req.app.locals.db;
-    const { name, email, password, phone_number } = req.body;
+    const { name, phone_number, shop_name, email } = req.body;
 
     // Check if user already exists
-    const existing = await getUserByEmail(db, email);
+    const existing = await getUserByPhone(db, phone_number);
     if (existing) {
-      return { status: false, statusCode: 400, message: "User already exists" };
-    }
-
-    // Hash password
-    const hashedPassword = await hashPassword(password);
-
-    // Get vendor role
-    const vendorRole = await getRoleByName(db, ROLES.VENDOR);
-    if (!vendorRole) {
       return {
         status: false,
-        statusCode: 500,
-        message: "Vendor role not found in system",
+        statusCode: 400,
+        message: "User with this phone number already exists",
       };
     }
 
-    // Create user with vendor role
-    const newVendor = await createUser(db, {
+    // Create vendor user first
+    const defaultPassword = "1234";
+    const hashedPassword = await hashPassword(defaultPassword);
+
+    const newUser = await createUser(db, {
       name,
-      email,
-      password: hashedPassword,
       phone_number,
-      role_id: vendorRole.id,
+      email: email || null,
+      password: hashedPassword,
+      role: ROLES.VENDOR,
     });
 
-    return { status: true, statusCode: 201, data: newVendor };
+    // Now insert into vendors table
+    const newVendor = await createVendor(db, {
+      user_id: newUser.id,
+      shop_name,
+    });
+
+    return {
+      status: true,
+      statusCode: 201,
+      data: {
+        ...newUser,
+        vendor: newVendor,
+      },
+      message: "Vendor added successfully. Default password: 1234",
+    };
   } catch (err) {
     return {
       status: false,
       statusCode: 500,
-      message: "Vendor registration failed",
+      message: "Failed to add vendor",
       error: err,
     };
   }
 };
 
-export { registerVendor };
+export { addVendor };

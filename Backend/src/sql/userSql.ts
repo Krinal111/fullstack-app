@@ -1,28 +1,29 @@
 import { PoolClient } from "pg";
 
-export const getUserByEmail = async (db: PoolClient, email: string) => {
-  const { rows } = await db.query("SELECT * FROM users WHERE email=$1", [
-    email,
+export const getUserByPhone = async (db: PoolClient, phone_number: string) => {
+  const { rows } = await db.query("SELECT * FROM users WHERE phone_number=$1", [
+    phone_number,
   ]);
   return rows[0];
 };
 
-export const createUser = async (db: PoolClient, user: any) => {
-  const { name, email, password, phone_number, role_id } = user;
+export const getUserWithRole = async (db: PoolClient, phone_number: string) => {
   const { rows } = await db.query(
-    "INSERT INTO users (name, email, password, phone_number, role_id) VALUES ($1,$2,$3,$4,$5) RETURNING *",
-    [name, email, password, phone_number, role_id]
+    `SELECT id, name, email, phone_number, role,is_active, created_at, updated_at 
+     FROM users 
+     WHERE phone_number=$1`,
+    [phone_number]
   );
   return rows[0];
 };
 
-export const getUserWithRole = async (db: PoolClient, email: string) => {
-  const query = `
-    SELECT u.id, u.name, u.email, u.phone_number, u.password, u.role_id, u.created_at, u.updated_at, r.role
-    FROM users u
-    JOIN roles r ON u.role_id = r.id
-    WHERE u.email = $1
-  `;
-  const { rows } = await db.query(query, [email]);
+export const createUser = async (db: PoolClient, user: any) => {
+  const { name, phone_number, email, password, role } = user;
+  const { rows } = await db.query(
+    `INSERT INTO users (name, phone_number, email, password, role)
+     VALUES ($1, $2, $3, $4, $5)
+     RETURNING id, name, phone_number, email, role, created_at`,
+    [name, phone_number, email, password, role ?? "Customer"]
+  );
   return rows[0];
 };

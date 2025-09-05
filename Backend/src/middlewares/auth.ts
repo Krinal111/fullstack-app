@@ -1,14 +1,31 @@
-// src/middlewares/auth.ts
+// middlewares/auth.ts
 import { Secret, sign, verify, TokenExpiredError } from "jsonwebtoken";
 import { NextFunction, Request, Response } from "express";
 import { jwtCreds } from "../config/config";
-import { AuthRequest, RoleType, User } from "../types";
-import { ROLES } from "../constants/Roles";
+import { AuthRequest } from "../types";
 import { getUserWithRole } from "../sql";
+import { AuthorizeRole } from "../constants/AuthorizeRole";
 
 const secretKey = jwtCreds.secretKeyJwt as Secret;
 
-export const generateToken = (validTime: string, user: { email: string }) => {
+const PUBLIC_ROUTES = [
+  { path: "/api/auth/login", method: "POST" },
+  { path: "/api/auth/register", method: "POST" },
+  { path: "/api/auth/refresh", method: "GET" },
+];
+
+// Helper function to check if route is public
+const isPublicRoute = (path: string, method: string): boolean => {
+  return PUBLIC_ROUTES.some(
+    (route) =>
+      route.path === path && route.method.toLowerCase() === method.toLowerCase()
+  );
+};
+
+export const generateToken = (
+  validTime: string,
+  user: { phone_number: string; role?: string }
+) => {
   try {
     const accessToken = sign({ ...user }, secretKey, {
       expiresIn: validTime,
@@ -19,12 +36,18 @@ export const generateToken = (validTime: string, user: { email: string }) => {
   }
 };
 
-export const verifyToken = async (
+export const VerifyToken = async (
   req: AuthRequest,
   res: Response,
   next: NextFunction
 ) => {
   try {
+    // Skip token verification for public routes
+    console.log(isPublicRoute(req.path, req.method));
+    if (isPublicRoute(req.path, req.method)) {
+      return next();
+    }
+
     const bearer = req?.headers?.authorization?.split(" ");
     if (!bearer || bearer[0] !== "Bearer") {
       return res.status(401).json({
@@ -41,11 +64,9 @@ export const verifyToken = async (
       });
     }
 
-    const decoded = verify(token, secretKey) as { email: string };
+    const decoded = verify(token, secretKey) as { phone_number: string };
+    const user = await getUserWithRole(req.app.locals.db, decoded.phone_number);
 
-    // Get user with role information
-    const user = await getUserWithRole(req.app.locals.db, decoded.email);
-    console.log("user", user);
     if (!user) {
       return res.status(401).json({
         status: false,
@@ -53,7 +74,13 @@ export const verifyToken = async (
       });
     }
 
-    // Attach user to request
+    if (!user.is_active) {
+      return res.status(401).json({
+        status: false,
+        message: "Account is deactivated",
+      });
+    }
+
     req.user = user;
     next();
   } catch (err) {
@@ -63,7 +90,6 @@ export const verifyToken = async (
         message: "Token expired. Please login again.",
       });
     }
-    console.error("Token verification error:", err);
     return res.status(401).json({
       status: false,
       message: "Invalid token",
@@ -71,8 +97,27 @@ export const verifyToken = async (
   }
 };
 
-export const authorizeRoles = (...allowedRoles: RoleType[]) => {
-  return (req: AuthRequest, res: Response, next: NextFunction) => {
+export const authoriseRole = (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    // Skip authorization for public routes
+    if (isPublicRoute(req.path, req.method)) {
+      return next();
+    }
+
+    // Extract the API path (remove /api prefix for AuthorizeRole lookup)
+    const apiPath = req.path.replace("/api", "");
+    const method = req.method.toLowerCase();
+
+    // Skip authorization for non-protected routes
+    if (!AuthorizeRole[apiPath] || !AuthorizeRole[apiPath][method]) {
+      return next();
+    }
+
+    // Check if user is authenticated (should be set by VerifyToken)
     if (!req.user) {
       return res.status(401).json({
         status: false,
@@ -80,25 +125,53 @@ export const authorizeRoles = (...allowedRoles: RoleType[]) => {
       });
     }
 
+    const allowedRoles = AuthorizeRole[apiPath][method];
     const userRole = req.user.role;
-    if (!userRole || !allowedRoles.includes(userRole as RoleType)) {
+
+    // Check if user's role is in the allowed roles
+    if (!allowedRoles.includes(userRole as string)) {
       return res.status(403).json({
         status: false,
-        message: `Access denied. Required roles: ${allowedRoles.join(", ")}`,
+        message: "Insufficient permissions",
+        required_roles: allowedRoles,
+        role: userRole,
       });
     }
 
     next();
-  };
+  } catch (error) {
+    return res.status(500).json({
+      status: false,
+      message: "Authorization error",
+      error: (error as Error).message,
+    });
+  }
 };
 
-// Specific role middlewares
-export const requireAdmin = authorizeRoles(ROLES.ADMIN);
-export const requireVendor = authorizeRoles(ROLES.VENDOR);
-export const requireCustomer = authorizeRoles(ROLES.CUSTOMER);
-export const requireVendorOrAdmin = authorizeRoles(ROLES.VENDOR, ROLES.ADMIN);
-export const requireAnyRole = authorizeRoles(
-  ROLES.ADMIN,
-  ROLES.VENDOR,
-  ROLES.CUSTOMER
-);
+export const ConditionalVerifyToken = (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  // Skip authentication for public routes
+  if (isPublicRoute(req.path, req.method)) {
+    return next();
+  }
+
+  // Apply normal token verification
+  return VerifyToken(req, res, next);
+};
+
+export const ConditionalAuthoriseRole = (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  // Skip authorization for public routes
+  if (isPublicRoute(req.path, req.method)) {
+    return next();
+  }
+
+  // Apply normal role authorization
+  return authoriseRole(req, res, next);
+};

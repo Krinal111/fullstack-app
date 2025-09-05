@@ -1,0 +1,47 @@
+
+CREATE TYPE user_role AS ENUM ('Customer', 'Vendor', 'Admin');
+
+CREATE TABLE users (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(150), -- Made optional since we're using phone for auth
+    password TEXT NOT NULL,
+    phone_number VARCHAR(20) UNIQUE NOT NULL, -- Made unique and required
+    role user_role DEFAULT 'Customer',
+    shop_name VARCHAR(200), -- For vendors only
+    is_active BOOLEAN DEFAULT true,
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW()
+);
+
+INSERT INTO users (
+    name,
+    email,
+    password,
+    phone_number,
+    role,
+    is_active
+) VALUES (
+    'Test Admin',
+    'admin@example.com',
+    '$2a$10$4cZNs1qZ2pgyHH4ZJBw4Ie82OsvkywwR/uvlhzNMurDXatGV3md5G', 
+    '+10000000000',
+    'Admin',
+    true
+);
+
+CREATE TABLE vendors (
+     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,             
+    user_id UUID NOT NULL,              
+    shop_name VARCHAR(100) NOT NULL,   
+    open_time TIME,           
+    close_time TIME,              
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW(),
+
+    CONSTRAINT fk_vendor_user
+        FOREIGN KEY (user_id) REFERENCES users(id)
+        ON DELETE CASCADE
+-- );
+
+select * from users

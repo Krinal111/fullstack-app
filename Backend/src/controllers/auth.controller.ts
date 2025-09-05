@@ -1,5 +1,5 @@
-import { Request, Response } from "express";
-import { getUserByEmail, createUser, getRoleByName, getRoleById } from "../sql";
+import { Request } from "express";
+import { getUserByPhone, createUser } from "../sql";
 import { hashPassword, compareHashPassword } from "../helpers/functions";
 import { generateToken } from "../middlewares/auth";
 import { jwtCreds } from "../config/config";
@@ -9,22 +9,34 @@ import { ROLES } from "../constants/Roles";
 const registerCustomer = async (req: Request) => {
   try {
     const db = req.app.locals.db;
-    const { name, email, password, phone_number } = req.body;
+    const { name, phone_number, email } = req.body;
 
-    const existing = await getUserByEmail(db, email);
-    if (existing) {
-      return { status: false, statusCode: 400, message: "User already exists" };
+    if (!phone_number || phone_number.length < 10) {
+      return {
+        status: false,
+        statusCode: 400,
+        message: "Valid phone number is required",
+      };
     }
 
-    const hashedPassword = await hashPassword(password);
-    const customerRole = await getRoleByName(db, ROLES.CUSTOMER);
+    const existing = await getUserByPhone(db, phone_number);
+    if (existing) {
+      return {
+        status: false,
+        statusCode: 400,
+        message: "User with this phone number already exists",
+      };
+    }
+
+    const defaultPassword = "1234";
+    const hashedPassword = await hashPassword(defaultPassword);
 
     const newUser = await createUser(db, {
       name,
+      phone_number,
       email,
       password: hashedPassword,
-      phone_number,
-      role_id: customerRole.id,
+      role: ROLES.CUSTOMER,
     });
 
     return { status: true, statusCode: 201, data: newUser };
@@ -41,41 +53,50 @@ const registerCustomer = async (req: Request) => {
 const login = async (req: Request) => {
   try {
     const db = req.app.locals.db;
-    const { email, password } = req.body;
+    const { phone_number, password } = req.body;
 
-    const user = await getUserByEmail(db, email);
+    if (!phone_number) {
+      return {
+        status: false,
+        statusCode: 400,
+        message: "Phone number is required",
+      };
+    }
+
+    const user = await getUserByPhone(db, phone_number);
     if (!user) {
-      return { status: false, statusCode: 400, message: "Invalid email" };
+      return {
+        status: false,
+        statusCode: 400,
+        message: "User not found with this phone number",
+      };
+    }
+
+    if (!user.is_active) {
+      return {
+        status: false,
+        statusCode: 401,
+        message: "Account is deactivated",
+      };
     }
 
     const match = await compareHashPassword(password, user.password);
-    console.log(
-      "match,email,password",
-      match,
-      email,
-      password,
-      user.password,
-      "::"
-    );
     if (!match) {
-      return { status: false, statusCode: 401, message: "Incorrect password" };
-    }
-
-    const role = await getRoleById(db, user.role_id);
-    if (!role) {
       return {
         status: false,
-        statusCode: 404,
-        message: "Role not found",
+        statusCode: 401,
+        message: "Incorrect password", 
       };
     }
 
     const jwt = generateToken(jwtCreds.sessionTime, {
-      email: user.email,
+      phone_number: user.phone_number,
+      role: user.role,
     });
 
     const refreshToken = generateToken(jwtCreds.refreshSessionTime, {
-      email: user.email,
+      phone_number: user.phone_number,
+      role: user.role,
     });
 
     if (!jwt) {
@@ -92,12 +113,10 @@ const login = async (req: Request) => {
       data: {
         id: user.id,
         name: user.name,
-        email: user.email,
         phone_number: user.phone_number,
-        role: {
-          role_id: user.role_id,
-          role_name: role.role,
-        },
+        email: user.email,
+        role: user.role,
+        shop_name: user.shop_name,
         auth_token: jwt,
         refreshToken,
       },
@@ -112,7 +131,7 @@ const login = async (req: Request) => {
   }
 };
 
-const refreshToken = async (req: Request) => {
+const refToken = async (req: Request) => {
   try {
     const refreshToken = req?.headers?.authorization?.split(" ")[1];
     if (!refreshToken) {
@@ -123,7 +142,6 @@ const refreshToken = async (req: Request) => {
       };
     }
 
-    // Verify refresh token
     let decoded: any;
     try {
       decoded = verify(refreshToken, jwtCreds.secretKeyJwt as string);
@@ -135,8 +153,7 @@ const refreshToken = async (req: Request) => {
       };
     }
 
-    // Get user from DB
-    const user = await getUserByEmail(req.app.locals.db, decoded.email);
+    const user = await getUserByPhone(req.app.locals.db, decoded.phone_number);
     if (!user) {
       return {
         statusCode: 404,
@@ -145,9 +162,9 @@ const refreshToken = async (req: Request) => {
       };
     }
 
-    // Generate new access token
     const newAccessToken = generateToken(jwtCreds.sessionTime, {
-      email: user.email,
+      phone_number: user.phone_number,
+      role: user.role,
     });
 
     return {
@@ -164,4 +181,5 @@ const refreshToken = async (req: Request) => {
     };
   }
 };
-export { registerCustomer, login, refreshToken };
+
+export { login, registerCustomer, refToken };

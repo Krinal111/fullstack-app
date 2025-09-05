@@ -2,6 +2,7 @@ import express, { type Application } from "express";
 import bodyParser from "body-parser";
 import { PoolClient } from "pg";
 import { router } from "../routes";
+import { authoriseRole, VerifyToken } from "./auth";
 
 const handler = (app: Application, db: PoolClient | undefined) => {
   app.locals.db = db;
@@ -12,6 +13,8 @@ const handler = (app: Application, db: PoolClient | undefined) => {
   }
   app.use(express.json(), bodyParser.urlencoded({ extended: true }));
   app.use(bodyParser.json());
+  app.use(VerifyToken);
+  app.use(authoriseRole);
   app.use("/api", router);
 };
 

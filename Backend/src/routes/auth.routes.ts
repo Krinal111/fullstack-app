@@ -1,24 +1,25 @@
-import { Request, Response } from "express";
-import { login, refreshToken, registerCustomer } from "../controllers";
-import express from "express";
+import express, { Request, Response } from "express";
+import { login, refToken, registerCustomer } from "../controllers";
+
+export const authRouter = express.Router();
+
 const ApiService = {
-  loginUser: async (req: Request, res: Response) => {
-    const resp = await login(req);
-    res.status(resp.statusCode).json(resp);
-  },
-  registerCustomer: async (req: Request, res: Response) => {
+  RegisterCustomer: async (req: Request, res: Response) => {
     const resp = await registerCustomer(req);
     res.status(resp.statusCode).json(resp);
   },
+  LoginUser: async (req: Request, res: Response) => {
+    const resp = await login(req);
+    res.status(resp.statusCode).json(resp);
+  },
   RefreshToken: async (req: Request, res: Response) => {
-    const resp = await refreshToken(req);
+    const resp = await refToken(req);
     res.status(resp.statusCode).json(resp);
   },
 };
 
-export const authRouter = express.Router();
-
+// Routes will automatically be protected based on AuthorizeRole configuration
 authRouter
-  .get("/", ApiService.RefreshToken)
-  .post("/login", ApiService.loginUser)
-  .post("/register", ApiService.registerCustomer);
+  .post("/register", ApiService.RegisterCustomer)
+  .post("/login", ApiService.LoginUser)
+  .get("/refresh", ApiService.RefreshToken);

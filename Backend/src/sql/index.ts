@@ -1,2 +1,2 @@
 export * from "./userSql";
-export * from "./roleSql";
+export * from "./vendorSql";

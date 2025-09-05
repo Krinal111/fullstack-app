@@ -1,0 +1,13 @@
+import { ROLES } from "../constants/Roles";
+
+export const RoleLevels = {
+  // Individual roles
+  CUSTOMER_ONLY: [ROLES.CUSTOMER],
+  VENDOR_ONLY: [ROLES.VENDOR],
+  ADMIN_ONLY: [ROLES.ADMIN],
+  
+  // Combined role levels
+  VENDOR_AND_ADMIN: [ROLES.VENDOR, ROLES.ADMIN],
+  CUSTOMER_AND_VENDOR: [ROLES.CUSTOMER, ROLES.VENDOR],
+  ALL_ROLES: [ROLES.CUSTOMER, ROLES.VENDOR, ROLES.ADMIN],
+};
