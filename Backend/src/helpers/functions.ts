@@ -20,4 +20,3 @@ export const compareHashPassword = async (
   const result = await bcrypt.compare(rawPassword, hashString);
   return result;
 };
-  

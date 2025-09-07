@@ -9,7 +9,7 @@ import { ROLES } from "../constants/Roles";
 const registerCustomer = async (req: Request) => {
   try {
     const db = req.app.locals.db;
-    const { name, phone_number, email } = req.body;
+    const { name, phone_number, email, password } = req.body;
 
     if (!phone_number || phone_number.length < 10) {
       return {
@@ -28,8 +28,7 @@ const registerCustomer = async (req: Request) => {
       };
     }
 
-    const defaultPassword = "1234";
-    const hashedPassword = await hashPassword(defaultPassword);
+    const hashedPassword = await hashPassword(password);
 
     const newUser = await createUser(db, {
       name,
@@ -54,7 +53,6 @@ const login = async (req: Request) => {
   try {
     const db = req.app.locals.db;
     const { phone_number, password } = req.body;
-
     if (!phone_number) {
       return {
         status: false,
@@ -79,13 +77,20 @@ const login = async (req: Request) => {
         message: "Account is deactivated",
       };
     }
+    console.log(
+      "phone_number,password",
+      phone_number,
+      password,
+      ":",
+      user.password
+    );
 
     const match = await compareHashPassword(password, user.password);
     if (!match) {
       return {
         status: false,
         statusCode: 401,
-        message: "Incorrect password", 
+        message: "Incorrect password",
       };
     }
 
