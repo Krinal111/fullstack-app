@@ -77,13 +77,7 @@ const login = async (req: Request) => {
         message: "Account is deactivated",
       };
     }
-    console.log(
-      "phone_number,password",
-      phone_number,
-      password,
-      ":",
-      user.password
-    );
+   
 
     const match = await compareHashPassword(password, user.password);
     if (!match) {

@@ -43,7 +43,6 @@ export const VerifyToken = async (
 ) => {
   try {
     // Skip token verification for public routes
-    console.log(isPublicRoute(req.path, req.method));
     if (isPublicRoute(req.path, req.method)) {
       return next();
     }

@@ -1,0 +1,67 @@
+.sidebar-main {
+  flex: 0 0 260px !important;
+  max-width: 260px !important;
+  min-width: 260px !important;
+  width: 260px !important;
+}
+
+.sidebar-main .ant-menu-inline {
+  padding: 4px 16px;
+  border: 0 !important;
+}
+
+.sidebar-main .ant-menu-inline .ant-menu-item svg,
+.sidebar-main .ant-menu-inline .ant-menu-submenu svg {
+  font-size: 18px !important;
+}
+
+.sidebar-main .ant-menu-inline .ant-menu-item .ant-menu-title-content,
+.sidebar-main .ant-menu-inline .ant-menu-submenu .ant-menu-title-content {
+  font-weight: 500;
+}
+
+.sidebar-main .ant-menu-inline .ant-menu-item {
+  padding-left: 16px !important;
+  color: #ffff;
+}
+
+.sidebar-main .ant-menu-inline .ant-menu-item-selected {
+  background-color: var(--color-accent) !important;
+  color: var(--color-text-dark);
+}
+
+.sidebar-main .ant-menu-light {
+  background: var(--color-primary) !important;
+}
+
+.sidebar-main.ant-layout-sider-collapsed {
+  flex: 0 0 80px !important;
+  max-width: 80px !important;
+  min-width: 80px !important;
+  width: 80px !important;
+}
+
+.sidebar-main.ant-layout-sider-collapsed .ant-menu.ant-menu-root {
+  padding: 4px 10px;
+}
+
+.sidebar-main.ant-layout-sider-collapsed .ant-menu-item svg {
+  font-size: 20px !important;
+  color: var(--color-text-light);
+}
+.sidebar-main.ant-layout-sider-collapsed .ant-menu-item-selected svg {
+  font-size: 20px !important;
+  color: var(--color-text-dark);
+}
+
+.sidebar-main .ant-menu-item:hover {
+  background-color: var(--color-hover) !important;
+  color: var(--color-text-light) !important;
+}
+
+.sidebar-main .ant-menu-item:hover svg {
+  color: var(--color-text-light) !important;
+}
+.ant-menu-light .ant-menu-item-selected {
+  background-color: var(--color-accent);
+}
