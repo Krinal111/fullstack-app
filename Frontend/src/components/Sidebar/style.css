@@ -1,4 +1,5 @@
 .sidebar-main {
+  background: var(--color-gradient-sidebar);
   flex: 0 0 260px !important;
   max-width: 260px !important;
   min-width: 260px !important;
@@ -25,13 +26,8 @@
   color: #ffff;
 }
 
-.sidebar-main .ant-menu-inline .ant-menu-item-selected {
-  background-color: var(--color-accent) !important;
-  color: var(--color-text-dark);
-}
-
 .sidebar-main .ant-menu-light {
-  background: var(--color-primary) !important;
+  background: transparent !important;
 }
 
 .sidebar-main.ant-layout-sider-collapsed {
@@ -47,21 +43,25 @@
 
 .sidebar-main.ant-layout-sider-collapsed .ant-menu-item svg {
   font-size: 20px !important;
-  color: var(--color-text-light);
+  /* color: var(--color-text-light); */
 }
 .sidebar-main.ant-layout-sider-collapsed .ant-menu-item-selected svg {
   font-size: 20px !important;
-  color: var(--color-text-dark);
+  /* color: var(--color-text-dark); */
 }
 
 .sidebar-main .ant-menu-item:hover {
-  background-color: var(--color-hover) !important;
+  background-color: var(--color-gradient-menu-hover) !important;
   color: var(--color-text-light) !important;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3) !important;
+  color: #ffffff !important;
 }
 
 .sidebar-main .ant-menu-item:hover svg {
-  color: var(--color-text-light) !important;
+  /* color: var(--color-text-light) !important; */
 }
 .ant-menu-light .ant-menu-item-selected {
-  background-color: var(--color-accent);
+  background: var(--color-gradient-menu-active) !important;
+  box-shadow: 0 4px 16px rgba(245, 158, 11, 0.4) !important;
+  color: #fff !important; /* optional: make text white for contrast */
 }

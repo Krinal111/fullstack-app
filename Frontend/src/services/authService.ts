@@ -14,8 +14,10 @@ const login = async (data: LoginPayload) => {
   return response.data;
 };
 
-const refreshToken = async () => {
-  const response: AxiosResponse = await axios.get("/auth/refresh");
+const refreshToken = async (refresh: string) => {
+  const response = await axios.get("/auth/refresh", {
+    headers: { Authorization: `Bearer ${refresh}` },
+  });
   return response.data;
 };
 

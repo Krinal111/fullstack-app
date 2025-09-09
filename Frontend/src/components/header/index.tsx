@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, Layout } from "antd";
 import { HiOutlineMenuAlt2, HiOutlineMenuAlt3 } from "react-icons/hi";
+import ProfileDropdown from "../ProfileDropDown";
 
 const { Header } = Layout;
 
@@ -20,7 +21,7 @@ const TopHeader: React.FC<SidebarProps> = ({
   return (
     <Header
       style={{ padding: 0 }}
-      className="!bg-secondary !text-primary border-b border-solid border-hover !px-6 flex items-center justify-between shadow-md"
+      className="!bg-accent !text-secondary !px-6 flex items-center justify-between shadow-md"
     >
       {/* Left side: Menu + Title */}
       <div className="flex gap-5 items-center">
@@ -28,19 +29,14 @@ const TopHeader: React.FC<SidebarProps> = ({
           type="text"
           icon={collapsed ? <HiOutlineMenuAlt3 /> : <HiOutlineMenuAlt2 />}
           onClick={() => setCollapsed(!collapsed)}
-          className="!text-[22px] !p-4 !text-primary  hover:!border-2 hover:!border-primary"
+          className="!text-[22px] !p-4 !text-secondary  hover:!border-2 hover:!border-secondary"
         />
-        <h3 className="text-lg font-semibold text-primary">{title}</h3>
+        <h3 className="text-lg font-semibold text-secondary">{title}</h3>
       </div>
 
       {/* Right side: Logout */}
-      <div>
-        <Button
-          onClick={onLogout}
-          className="bg-secondary text-text-dark font-medium px-4 py-1 rounded-lg shadow hover:bg-hover hover:text-text-light transition"
-        >
-          Logout
-        </Button>
+      <div className="flex items-center gap-5">
+        <ProfileDropdown />
       </div>
     </Header>
   );

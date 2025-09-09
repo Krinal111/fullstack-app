@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Form } from "antd";
-import Button from "../components/button";
+import Button from "../components/Button";
 import PhoneField from "../components/Phonefield";
 import PasswordField from "../components/PasswordField";
 import { isValidPhoneNumber } from "react-phone-number-input";

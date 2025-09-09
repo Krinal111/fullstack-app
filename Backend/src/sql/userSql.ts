@@ -27,3 +27,14 @@ export const createUser = async (db: PoolClient, user: any) => {
   );
   return rows[0];
 };
+
+export const getUserById = async (db: PoolClient, id: string) => {
+  try {
+    const query = `SELECT * FROM users WHERE id = $1`;
+    const resp = await db.query(query, [id]);
+    return !resp ? null : resp.rows[0];
+  } catch (err) {
+    console.error(`Error in getting User by id : ${err}`);
+    throw err;
+  }
+};

@@ -1,0 +1,13 @@
+.profile-upload .ant-upload-select {
+  border: 0 !important;
+  background-color: unset !important;
+}
+
+.custom-black-bg {
+  background-color: rgba(
+    0,
+    0,
+    0,
+    0.5
+  ); /* Adjust the alpha value to change opacity */
+}

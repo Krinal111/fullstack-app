@@ -20,3 +20,11 @@ export const compareHashPassword = async (
   const result = await bcrypt.compare(rawPassword, hashString);
   return result;
 };
+
+export const constructUpdateQuery = (obj: object) => {
+  const setClause = Object.keys(obj)
+    .map((val: string, i: number) => `${val} = $${i + 1}`)
+    .join(", ");
+
+  return setClause;
+};

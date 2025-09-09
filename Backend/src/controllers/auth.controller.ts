@@ -77,7 +77,6 @@ const login = async (req: Request) => {
         message: "Account is deactivated",
       };
     }
-   
 
     const match = await compareHashPassword(password, user.password);
     if (!match) {
@@ -115,7 +114,6 @@ const login = async (req: Request) => {
         phone_number: user.phone_number,
         email: user.email,
         role: user.role,
-        shop_name: user.shop_name,
         auth_token: jwt,
         refreshToken,
       },
@@ -129,10 +127,13 @@ const login = async (req: Request) => {
     };
   }
 };
+// adjust to your actual import
 
 const refToken = async (req: Request) => {
   try {
+    const db = req.app.locals.db;
     const refreshToken = req?.headers?.authorization?.split(" ")[1];
+
     if (!refreshToken) {
       return {
         statusCode: 400,
@@ -141,6 +142,7 @@ const refToken = async (req: Request) => {
       };
     }
 
+    // ✅ Verify refresh token
     let decoded: any;
     try {
       decoded = verify(refreshToken, jwtCreds.secretKeyJwt as string);
@@ -152,7 +154,8 @@ const refToken = async (req: Request) => {
       };
     }
 
-    const user = await getUserByPhone(req.app.locals.db, decoded.phone_number);
+    // ✅ Fetch user by phone_number from decoded payload
+    const user = await getUserByPhone(db, decoded.phone_number);
     if (!user) {
       return {
         statusCode: 404,
@@ -161,15 +164,25 @@ const refToken = async (req: Request) => {
       };
     }
 
+    // ✅ Generate new access token
     const newAccessToken = generateToken(jwtCreds.sessionTime, {
       phone_number: user.phone_number,
       role: user.role,
     });
 
+    // ✅ Return same structure as login
     return {
       statusCode: 200,
       status: true,
-      auth_token: newAccessToken,
+      data: {
+        id: user.id,
+        name: user.name,
+        phone_number: user.phone_number,
+        email: user.email,
+        role: user.role,
+        auth_token: newAccessToken,
+        refreshToken, // keep the same refresh token client already had
+      },
     };
   } catch (err) {
     return {
@@ -180,5 +193,7 @@ const refToken = async (req: Request) => {
     };
   }
 };
+
+export default refToken;
 
 export { login, registerCustomer, refToken };

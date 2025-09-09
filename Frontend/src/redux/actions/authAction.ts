@@ -1,5 +1,5 @@
 import type { NavigateFunction } from "react-router";
-import { setToken } from "../../utils/localStorageHelper";
+import { getRefreshToken, setToken } from "../../utils/localStorageHelper";
 import { dispatch } from "../store";
 import {
   loginSuccess,
@@ -52,9 +52,13 @@ export const registerAction = async (
 
 export const refreshTokenAction = async (): Promise<void> => {
   try {
-    const data = await AuthService.refreshToken();
-    dispatch(loginSuccess(data.data)); // update redux with new token
-    setToken(data.data.auth_token); // update localStorage
+    const refresh = getRefreshToken(); // ✅ get refresh token
+    if (!refresh) throw new Error("No refresh token found");
+
+    const data = await AuthService.refreshToken(refresh);
+
+    dispatch(loginSuccess(data.data));
+    setToken(data.data.auth_token, data.data.refreshToken); // ✅ update both
   } catch (error: any) {
     dispatch(setError(error.message || "Failed to refresh token"));
   }

@@ -3,7 +3,7 @@ import { Outlet, useLocation } from "react-router";
 import { Layout } from "antd";
 import { route } from "../routes/path";
 import Sidebar from "../components/Sidebar";
-import TopHeader from "../components/header";
+import TopHeader from "../components/Header";
 
 const DashboardLayout: React.FC = () => {
   const [collapsed, setCollapsed] = useState<boolean>(false);
@@ -31,7 +31,7 @@ const DashboardLayout: React.FC = () => {
           collapsed={collapsed}
           setCollapsed={setCollapsed}
         />
-        <div className="min-h-screen overflow-y-auto bg-white">
+        <div className="min-h-screen overflow-y-auto bg-primary">
           <Outlet />
         </div>
       </Layout>

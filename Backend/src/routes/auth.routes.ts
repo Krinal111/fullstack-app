@@ -16,6 +16,7 @@ const ApiService = {
     const resp = await refToken(req);
     res.status(resp.statusCode).json(resp);
   },
+  
 };
 
 // Routes will automatically be protected based on AuthorizeRole configuration

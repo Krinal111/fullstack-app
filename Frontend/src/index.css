@@ -12,15 +12,30 @@ body {
   --breakpoint-3xl: 120rem;
 
   /* Background and base */
-  --color-primary: #8b4513;
+  --color-primary: #fff99f;
   /* --color-primary: #ffffcc; */
-  --color-accent: #fdfbd4;
-  --color-secondary: #ffff99;
-  --color-hover: #9e7869;
-  --color-text-light: #ffffff;
-  --color-text-dark: #4e342e;
+  --color-accent: rgb(255 246 211);
+  --color-secondary: rgb(120 53 15);
+
+  --color-activemenu-primary: #f59e0b;
+  --color-activemenu-secondary: #d97706;
+  --color-hover-primary: #f59e0b20;
+  --color-hover-secondary: #d97706;
+  --color-light: #ffffff;
+  --color-dark: #4e342e;
   --color-card: #ffffff;
-  --color-shadow: rgba(121, 85, 72, 0.15);
+  --color-shadow: rgba(0, 0, 0, 0.15);
+  --color-gradient-sidebar: linear-gradient(180deg, #92400e 0%, #a16207 100%);
+  --color-gradient-menu-active: linear-gradient(
+    135deg,
+    var(--color-activemenu-primary),
+    var(--color-activemenu-secondary)
+  );
+  --color-gradient-menu-hover: linear-gradient(
+    135deg,
+    #f59e0b20 0%,
+    #d97706 100%
+  ) !important;
 }
 
 /* :root {

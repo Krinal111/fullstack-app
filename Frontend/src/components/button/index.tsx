@@ -12,6 +12,7 @@ const Button: React.FC<ButtonProps> = ({
     onClick={onClick}
     {...props}
     type={type}
+    style={{ background: "var(--color-gradient-menu-active)" }}
     className={`px-5 !h-auto ${className}`}
   >
     {children}

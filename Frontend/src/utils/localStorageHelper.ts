@@ -1,6 +1,6 @@
 import axios from "./axios";
 
-const setToken = (token: string): void => {
+const setToken = (token: string, refreshToken?: string): void => {
   if (token) {
     localStorage.setItem("token", token);
     axios.defaults.headers.common.Authorization = `Bearer ${token}`;
@@ -8,8 +8,13 @@ const setToken = (token: string): void => {
     localStorage.removeItem("token");
     delete axios.defaults.headers.common.Authorization;
   }
+  if (refreshToken) {
+    localStorage.setItem("refreshToken", refreshToken);
+  }
 };
 
 const getToken = (): string | null => localStorage.getItem("token");
+const getRefreshToken = (): string | null =>
+  localStorage.getItem("refreshToken");
 
-export { setToken, getToken };
+export { setToken, getToken, getRefreshToken };

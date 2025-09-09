@@ -84,7 +84,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
       trigger={null}
       collapsible
       collapsed={collapsed}
-      className="sidebar-main !bg-primary"
+      className="sidebar-main"
     >
       <div className="flex justify-center my-4">
         <img alt="Logo" width={collapsed ? 55 : 180} />
@@ -93,7 +93,6 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
         mode="inline"
         defaultSelectedKeys={[location.pathname]}
         selectedKeys={[location.pathname]}
-        className="!bg-primary"
         items={menuItems.map((item) => ({
           key: item.key,
           icon: item.icon,

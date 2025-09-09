@@ -9,3 +9,8 @@ export interface LoginPayload {
   phone_number: string;
   password: string;
 }
+
+export interface UserUpdateInterface {
+  name?: string;
+  phone_number?: string;
+}

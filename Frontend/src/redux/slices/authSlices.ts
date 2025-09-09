@@ -7,6 +7,7 @@ export interface AuthState {
   success: boolean | null;
   message: string | null;
   token: string | null;
+  refreshToken: string | null;
 }
 
 const initialState: AuthState = {
@@ -16,6 +17,7 @@ const initialState: AuthState = {
   success: null,
   message: null,
   token: null,
+  refreshToken: null,
 };
 
 const authSlice = createSlice({
@@ -33,6 +35,7 @@ const authSlice = createSlice({
       state.isLoading = false;
       state.userData = action.payload;
       state.token = action.payload.auth_token;
+      state.refreshToken = action.payload.refreshToken;
       state.success = true;
       state.error = null;
     },
@@ -46,6 +49,16 @@ const authSlice = createSlice({
     logoutSuccess() {
       return initialState;
     },
+    editUsersProfileSuccess(state, action) {
+      const updateUser = action.payload;
+      const oldUser = JSON.parse(JSON.stringify(state.userData));
+      state.userData = { ...oldUser, ...updateUser };
+      state.error = null;
+    },
+    setSuccess(state, action) {
+      state.isLoading = false;
+      state.success = action.payload;
+    },
   },
 });
 
@@ -55,6 +68,8 @@ export const {
   loginSuccess,
   registerSuccess,
   logoutSuccess,
+  editUsersProfileSuccess,
+  setSuccess,
 } = authSlice.actions;
 
 export default authSlice.reducer;
