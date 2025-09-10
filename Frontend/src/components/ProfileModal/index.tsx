@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { dispatch, useSelector, type AppState } from "../../redux/store";
 import type { UserUpdateInterface } from "../../types/authTypes";
 import { setSuccess } from "../../redux/slices/authSlices";
-import { Button, Form, Input, message, Modal } from "antd";
+import { Form, Input, message, Modal } from "antd";
 import { editUserProfileAction } from "../../redux/actions/userAction"; // ✅ fix typo
 import PhoneField from "../Phonefield";
 import { isValidPhoneNumber } from "react-phone-number-input";
+import Button from "../Button";
 
 const ViewProfileModal = ({
   isModalOpen,
@@ -131,14 +132,11 @@ const ViewProfileModal = ({
                 htmlType="button"
                 className="!font-semibold"
                 onClick={() => handleClose()}
+                variant="outlined"
               >
                 Cancel
               </Button>
-              <Button
-                type="primary"
-                htmlType="submit"
-                className="!font-semibold"
-              >
+              <Button htmlType="submit" className="!font-semibold">
                 Update
               </Button>
             </div>
@@ -147,7 +145,6 @@ const ViewProfileModal = ({
         {!edit && (
           <div className="flex justify-end items-center -mb-5 mt-5 gap-2">
             <Button
-              type="primary"
               htmlType="button"
               className="!font-semibold"
               onClick={() => setEdit(true)}
