@@ -67,6 +67,9 @@ export const AuthorizeRole: {
   },
 
   // ========== PUBLIC/SHARED ROUTES (Optional - can also be in PUBLIC_ROUTES) ==========
+  "/users/{id}": {
+    patch: RoleLevels.ALL_ROLES,
+  },
   "/menu": {
     get: RoleLevels.ALL_ROLES,
   },

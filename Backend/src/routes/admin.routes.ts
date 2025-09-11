@@ -8,4 +8,5 @@ const ApiService = {
     res.status(resp.statusCode).json(resp);
   },
 };
-adminRouter.post("/add-vendor", ApiService.AddVendor); // Only admin can access due to AuthorizeRole config
+adminRouter.post("/add-vendor", ApiService.AddVendor);
+// Only admin can access due to AuthorizeRole config

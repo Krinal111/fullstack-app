@@ -5,6 +5,7 @@ import { jwtCreds } from "../config/config";
 import { AuthRequest } from "../types";
 import { getUserWithRole } from "../sql";
 import { AuthorizeRole } from "../constants/AuthorizeRole";
+import { normalizePath } from "../helpers/functions";
 
 const secretKey = jwtCreds.secretKeyJwt as Secret;
 
@@ -108,10 +109,10 @@ export const authoriseRole = (
     }
 
     // Extract the API path (remove /api prefix for AuthorizeRole lookup)
-    const apiPath = req.path.replace("/api", "");
+    let apiPath = req.path.replace("/api", "");
+    apiPath = normalizePath(apiPath); // 👈 normalize before lookup
     const method = req.method.toLowerCase();
 
-    // Skip authorization for non-protected routes
     if (!AuthorizeRole[apiPath] || !AuthorizeRole[apiPath][method]) {
       return next();
     }

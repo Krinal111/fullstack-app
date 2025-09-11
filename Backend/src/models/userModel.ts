@@ -5,7 +5,7 @@ export const UserProjection = [
   "users.password",
   "users.phone_number",
   "users.role",
-  "users.created_at",
+  "user s.created_at",
   "users.updated_at",
 ];
 

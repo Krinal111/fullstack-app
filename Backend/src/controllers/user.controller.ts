@@ -47,7 +47,7 @@ const updateUser = async (req: Request) => {
         rows: [
           {
             ...response?.rows[0],
-            password: "",
+            password: null,
           },
         ],
       },
