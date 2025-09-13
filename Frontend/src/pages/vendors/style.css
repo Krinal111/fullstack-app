@@ -1,0 +1,6 @@
+.benchmark-table
+  .ant-table-header
+  .ant-table-cell.ant-table-column-has-sorters:hover
+  .ant-table-column-title {
+  color: black;
+}

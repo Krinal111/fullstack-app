@@ -1,0 +1,7 @@
+.ant-popover:has(.ant-popconfirm-inner-content) .ant-popover-inner {
+  padding: 8px !important;
+}
+
+.ant-popover .ant-popover-inner {
+  padding: 8px 0 !important;
+}

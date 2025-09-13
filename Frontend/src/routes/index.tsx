@@ -4,9 +4,10 @@ import { GuestGuard } from "../guards/GuestGuards";
 import { AuthGuard } from "../guards/AuthGuards";
 import Login from "../pages/Login";
 import Dashboard from "../pages/Dashboard";
-import { useSelector, type AppState } from "../redux/store";
+// import { useSelector, type AppState } from "../redux/store";
 import RoleBasedGuard from "../guards/RoleBasedGuard";
 import DashboardLayout from "../layout/DashboardLayout";
+import Vendors from "../pages/vendors";
 
 type RoutesType = () => React.ReactElement<
   unknown,
@@ -42,7 +43,7 @@ const routes: RouteObject[] = [
         path: route.VENDORS.path,
         element: (
           <RoleBasedGuard allowedRoles={route.VENDORS.roles}>
-            <div>Vendors</div>
+            <Vendors />
           </RoleBasedGuard>
         ),
       },

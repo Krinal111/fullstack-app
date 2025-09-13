@@ -130,13 +130,16 @@ const ViewProfileModal = ({
             <div className="flex justify-end items-center -mb-5 mt-8 gap-2">
               <Button
                 htmlType="button"
-                className="!font-semibold"
+                className="!font-semibold !text-secondary focus:!text-light focus:![background:var(--color-gradient-sidebar)]"
                 onClick={() => handleClose()}
                 variant="outlined"
               >
                 Cancel
               </Button>
-              <Button htmlType="submit" className="!font-semibold">
+              <Button
+                htmlType="submit"
+                className="!font-semibold !text-secondary focus:!text-light focus:![background:var(--color-gradient-sidebar)]"
+              >
                 Update
               </Button>
             </div>
@@ -146,7 +149,7 @@ const ViewProfileModal = ({
           <div className="flex justify-end items-center -mb-5 mt-5 gap-2">
             <Button
               htmlType="button"
-              className="!font-semibold"
+              className="!font-semibold ![background:var(--color-gradient-sidebar)] !text-light !border-secondary"
               onClick={() => setEdit(true)}
             >
               Edit

@@ -12,7 +12,7 @@ const Button: React.FC<ButtonProps> = ({
     onClick={onClick}
     {...props}
     type={type}
-    className={`!px-5 !py-2 ![background:var(--color-gradient-sidebar)] !h-auto !text-white ${className}`}
+    className={`!px-5 !py-2  !h-auto ${className}`}
   >
     {children}
   </AntdButton>
