@@ -10,10 +10,8 @@ interface Vendor {
   close_time: string | null;
   created_at: string;
   updated_at: string;
-  user: {
-    name: string;
-    phone_number: string;
-  } | null;
+  name: string;
+  phone_number: string;
 }
 
 interface ActionProps {
@@ -33,13 +31,25 @@ export const VENDOR_COLUMNS = [
   },
   {
     title: "User Name",
-    dataIndex: ["user", "name"],
+    dataIndex: "name",
     key: "user_name",
   },
   {
     title: "Phone Number",
-    dataIndex: ["user", "phone_number"],
+    dataIndex: "phone_number",
     key: "phone_number",
+  },
+  {
+    title: "Booking start Time",
+    dataIndex: "open_time",
+    key: "open_time",
+    render: (value) => value ?? "-",
+  },
+  {
+    title: "Booking Close Time",
+    dataIndex: "close_time",
+    key: "close_time",
+    render: (value) => value ?? "-",
   },
   {
     title: "Created At",

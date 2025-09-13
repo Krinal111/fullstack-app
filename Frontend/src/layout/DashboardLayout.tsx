@@ -31,7 +31,7 @@ const DashboardLayout: React.FC = () => {
           collapsed={collapsed}
           setCollapsed={setCollapsed}
         />
-        <div className="min-h-screen overflow-y-auto bg-primary">
+        <div className="min-h-screen overflow-y-auto">
           <Outlet />
         </div>
       </Layout>

@@ -10,12 +10,14 @@ interface PhoneInputFieldProps {
   disabled?: boolean;
   international?: boolean;
   limitMaxLength?: boolean;
+  value?: string;
 }
 
 const PhoneField: React.FC<PhoneInputFieldProps> = ({
   className,
   label,
   required,
+  value,
   ...otherProps
 }) => (
   <div className="flex flex-col gap-1 w-full">
@@ -31,6 +33,7 @@ const PhoneField: React.FC<PhoneInputFieldProps> = ({
       limitMaxLength
       className={`${className}`}
       international={false}
+      value={value}
       {...otherProps}
     />
   </div>

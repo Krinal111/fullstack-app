@@ -18,6 +18,19 @@ function App() {
             colorInfo: "#ff5b22",
             fontFamily: "Montserrat",
           },
+          components: {
+            Table: {
+              headerBorderRadius: 0,
+              cellPaddingBlock: 14,
+              headerBg: "rgb(120 53 15)",
+              borderColor: "transparent",
+              headerColor: "#ffff",
+              headerSplitColor: "rgb(120 53 15)",
+              rowExpandedBg: "#677778",
+              colorText: "#818e8f",
+              fontWeightStrong: 600,
+            },
+          },
         }}
       >
         <Routes />

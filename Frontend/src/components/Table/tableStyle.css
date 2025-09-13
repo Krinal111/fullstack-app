@@ -1,18 +1,37 @@
-.ant-table-wrapper table {
-  font-family: unset !important;
+/* Outer container */
+.ant-table-wrapper .ant-table {
   border-radius: 8px;
+  overflow: hidden; /* IMPORTANT so inner tables don’t overflow corners */
+  font-family: unset !important;
 }
 
 .ant-table-wrapper table td,
 .ant-table-wrapper table th {
   border: 0;
 }
-
 .ant-table-wrapper table tbody {
-  border-radius: 0 0 8px;
+  border-radius: 0 0 8px !important;
 }
 
 .ant-table-wrapper table tbody tr td {
-  border-bottom: 1px solid var(--primary-40) !important;
+  border-bottom: 1px solid var(--color-secondary) !important;
   font-weight: 500;
+}
+/* Scrollbar for AntD table body */
+.ant-table-body::-webkit-scrollbar,
+.ant-table-content::-webkit-scrollbar {
+  width: 6px;
+  height: 8px;
+}
+
+.ant-table-body::-webkit-scrollbar-track,
+.ant-table-content::-webkit-scrollbar-track {
+  background: transparent; /* keeps it clean */
+}
+
+.ant-table-body::-webkit-scrollbar-thumb,
+.ant-table-content::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+  background-color: var(--color-secondary); /* corrected */
+  min-height: 20px;
 }

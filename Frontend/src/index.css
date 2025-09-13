@@ -38,15 +38,24 @@ body {
   ) !important;
 }
 
-/* :root {
-  --bg-color: #ffff99;
-  --sidebar-bg: #8b4513;
-  --accent-color: #fdfbd4; 
-  --hover-color: #9e7869;
-  --text-light: #ffffff;
-  --text-dark: #4e342e;
-  --card-bg: #ffffff;
-  --shadow-color: rgba(121, 85, 72, 0.15);
-} 
+html,
+body {
+  height: 100%;
+  overflow: auto; /* ensure scrollbar exists */
+}
 
-*/
+/* Global scrollbar style */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-secondary);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: var(--color-secondary);
+}
