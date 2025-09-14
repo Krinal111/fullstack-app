@@ -2,6 +2,7 @@
 import type { ColumnType } from "antd/es/table";
 import React from "react";
 import TableActions from "../../components/TableAction";
+import moment from "moment";
 
 interface Vendor {
   id: string;
@@ -39,18 +40,7 @@ export const VENDOR_COLUMNS = [
     dataIndex: "phone_number",
     key: "phone_number",
   },
-  {
-    title: "Booking start Time",
-    dataIndex: "open_time",
-    key: "open_time",
-    render: (value) => value ?? "-",
-  },
-  {
-    title: "Booking Close Time",
-    dataIndex: "close_time",
-    key: "close_time",
-    render: (value) => value ?? "-",
-  },
+
   {
     title: "Created At",
     dataIndex: "created_at",

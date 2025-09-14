@@ -10,7 +10,6 @@ const DashboardLayout: React.FC = () => {
   const [title, setTitle] = useState<string>("");
 
   const location = useLocation();
-
   const routesArray = Object.values(route);
 
   useEffect(() => {
@@ -23,17 +22,25 @@ const DashboardLayout: React.FC = () => {
   }, [location.pathname, routesArray]);
 
   return (
-    <Layout className="h-screen" style={{ background: "white" }}>
+    <Layout style={{ minHeight: "100vh", background: "white" }}>
       <Sidebar collapsed={collapsed} />
-      <Layout style={{ background: "white" }}>
+      <Layout className="bg-primary">
         <TopHeader
           title={title}
           collapsed={collapsed}
           setCollapsed={setCollapsed}
         />
-        <div className="min-h-screen overflow-y-auto">
+        {/* Content area */}
+        <Layout.Content
+          className="bg-primary"
+          style={{
+            minHeight: "calc(100vh - 64px)", // 64px = typical header height
+            overflowY: "auto",
+            padding: "24px",
+          }}
+        >
           <Outlet />
-        </div>
+        </Layout.Content>
       </Layout>
     </Layout>
   );

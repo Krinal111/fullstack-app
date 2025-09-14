@@ -115,7 +115,7 @@ const login = async (req: Request) => {
         email: user.email,
         role: user.role,
         auth_token: jwt,
-        refreshToken,
+        refreshToken: refreshToken,
       },
     };
   } catch (err) {
@@ -181,7 +181,7 @@ const refToken = async (req: Request) => {
         email: user.email,
         role: user.role,
         auth_token: newAccessToken,
-        refreshToken, // keep the same refresh token client already had
+        refreshToken,
       },
     };
   } catch (err) {

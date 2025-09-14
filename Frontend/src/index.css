@@ -3,6 +3,7 @@
 
 body {
   font-family: "Montserrat", sans-serif !important;
+  background-color: var(--color-primary);
 }
 @theme {
   /* Fonts */
@@ -12,7 +13,7 @@ body {
   --breakpoint-3xl: 120rem;
 
   /* Background and base */
-  --color-primary: #fff99f;
+  --color-primary: #ffff99;
   /* --color-primary: #ffffcc; */
   --color-accent: rgb(255 246 211);
   --color-secondary: rgb(120 53 15);
@@ -27,7 +28,7 @@ body {
   --color-shadow: rgba(0, 0, 0, 0.15);
   --color-gradient-sidebar: linear-gradient(180deg, #92400e 0%, #a16207 100%);
   --color-gradient-menu-active: linear-gradient(
-    135deg,
+    180deg,
     var(--color-activemenu-primary),
     var(--color-activemenu-secondary)
   );

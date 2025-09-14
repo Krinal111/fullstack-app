@@ -1,6 +1,7 @@
 import React from "react";
-import Button from "../components/Button";
-import { logoutAction } from "../redux/actions/authAction";
+import Button from "../../components/Button";
+import { logoutAction } from "../../redux/actions/authAction";
+
 
 function Dashboard() {
   return (

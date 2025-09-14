@@ -5,10 +5,6 @@ export const AuthorizeRole: {
     [method: string]: string[];
   };
 } = {
-  // ========== AUTH ROUTES (These are handled as public routes) ==========
-  // No need to define /auth/register, /auth/login, /auth/refresh here
-  // as they are in PUBLIC_ROUTES array
-
   // ========== ADMIN ROUTES ==========
   "/admin/add-vendor": {
     post: RoleLevels.ADMIN_ONLY,
@@ -19,8 +15,13 @@ export const AuthorizeRole: {
     patch: RoleLevels.VENDOR_AND_ADMIN,
     delete: RoleLevels.ADMIN_ONLY,
   },
-
-  // ========== CUSTOMER ROUTES ==========
+  "/vendor-timings/{vendorId}": {
+    post: RoleLevels.VENDOR_ONLY,
+  },
+  "/vendor-timings/:id": {
+    patch: RoleLevels.VENDOR_ONLY,
+    delete: RoleLevels.VENDOR_ONLY,
+  },
 
   // ========== PUBLIC/SHARED ROUTES (Optional - can also be in PUBLIC_ROUTES) ==========
   "/users/{id}": {
@@ -30,14 +31,6 @@ export const AuthorizeRole: {
     get: RoleLevels.ALL_ROLES,
   },
   "/vendors/{id}": {
-    get: RoleLevels.ALL_ROLES,
-  },
-
-  // ========== MIXED PERMISSIONS ==========
-  "/orders": {
-    get: RoleLevels.VENDOR_AND_ADMIN,
-  },
-  "/orders/{id}": {
     get: RoleLevels.ALL_ROLES,
   },
 };

@@ -29,9 +29,9 @@ const PhoneField: React.FC<PhoneInputFieldProps> = ({
       placeholder="Enter phone number"
       autoComplete="off"
       defaultCountry="IN"
-      countryCallingCodeEditable
+      countryCallingCodeEditable={false}
       limitMaxLength
-      className={`${className}`}
+      className={`${className} !h-10`}
       international={false}
       value={value}
       {...otherProps}

@@ -33,6 +33,7 @@ export const getVendorsAction = async (
   }
 };
 
+// 🔹 Add Vendor
 export const addVendorAction = async (
   data: any,
   page: number,
@@ -42,7 +43,7 @@ export const addVendorAction = async (
   try {
     const responseData = await vendorServices.addVendor(data);
     dispatch(addVendorSuccess(responseData));
-    getVendorsAction(page, limit);
+    await getVendorsAction(limit, page, "ASC", ""); // ✅ correct order
   } catch (error) {
     dispatch(setError(error as Error));
   }
@@ -62,7 +63,7 @@ export const deleteVendorAction = async (
   try {
     const responseData = await vendorServices.deleteVendor(id);
     dispatch(deleteVendorSuccess(responseData));
-    getVendorsAction(page, limit);
+    await getVendorsAction(limit, page, "ASC", ""); // ✅ correct order
   } catch (error) {
     dispatch(setError(error as Error));
   }
@@ -79,7 +80,7 @@ export const updateVendorAction = async (
   try {
     const responseData = await vendorServices.updateVendor(id, data);
     dispatch(updateVendorSuccess(responseData));
-    getVendorsAction(page, limit);
+    await getVendorsAction(limit, page, "ASC", ""); // ✅ no dispatch
   } catch (error: any) {
     let vendorError: Error;
     if (error?.error?.code === "23503") {

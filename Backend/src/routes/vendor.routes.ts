@@ -1,5 +1,10 @@
 import express, { Request, Response } from "express";
-import { deleteVendor, getAllVendors, updateVendor } from "../controllers";
+import {
+  deleteVendor,
+  getAllVendors,
+  getVendorDetails,
+  updateVendor,
+} from "../controllers";
 
 export const vendorRouter = express.Router();
 
@@ -7,6 +12,10 @@ const ApiService = {
   getVendors: async (req: Request, res: Response) => {
     const resp = await getAllVendors(req);
     res.status(resp.statusCode).json(resp);
+  },
+  getVendorDetail: async (req: Request, res: Response) => {
+    const resp = await getVendorDetails(req);
+    res.status(res.statusCode).json(resp);
   },
   updateVendorDetails: async (req: Request, res: Response) => {
     const resp = await updateVendor(req);
@@ -19,5 +28,6 @@ const ApiService = {
 };
 
 vendorRouter.get("/all-vendors", ApiService.getVendors);
-vendorRouter.patch("/:id", ApiService.updateVendorDetails);
-vendorRouter.delete("/:id", ApiService.deleteVendorDetails);
+vendorRouter.get("/:id", ApiService.getVendorDetail);
+vendorRouter.patch("/:uuid", ApiService.updateVendorDetails);
+vendorRouter.delete("/:uuid", ApiService.deleteVendorDetails);

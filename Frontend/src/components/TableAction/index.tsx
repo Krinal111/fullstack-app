@@ -49,16 +49,7 @@ const TableActions: React.FC<any> = ({
       icon: <VscEdit className="text-lg" />,
       callback: onUpdate,
     },
-    // {
-    //   label: "Clone",
-    //   icon: <FaRegClone className="text-lg" />,
-    //   callback: onClone,
-    // },
-    // {
-    //   label: "Download",
-    //   icon: <AiOutlineCloudDownload className="text-[20px]" />,
-    //   callback: onDownload,
-    // },
+
     {
       label: "Delete",
       icon: <MdDeleteOutline className="text-lg" />,
@@ -129,15 +120,14 @@ const TableActions: React.FC<any> = ({
         onOpenChange={handleOpenChange}
         style={{ padding: 0 }}
       >
-        <Button onClick={() => setHide(true)} type="text" className="!px-1">
-          <BsThreeDotsVertical className="text-[20px] text-primary" />
+        <Button
+          onClick={() => setHide(true)}
+          type="text"
+          className="!px-1 hover:border-2 !hover:border-secondary"
+        >
+          <BsThreeDotsVertical className="text-[20px] text-secondary" />
         </Button>
       </Popover>
-      {/* <ResetPasswordModal
-        isModalOpen={isModalOpen}
-        setIsModalOpen={setIsModalOpen}
-        isUserName={isUserName}
-      /> */}
     </>
   );
 };

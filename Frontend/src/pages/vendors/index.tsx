@@ -7,27 +7,14 @@ import { VENDOR_COLUMNS, VendorAction } from "./constant.tsx";
 import { setError } from "../../redux/slices/vendorSlice.ts";
 import {
   getVendorsAction,
-  updateVendorAction,
   deleteVendorAction,
 } from "../../redux/actions/vendorAction.ts";
 import { Spin } from "antd";
 import Table from "../../components/Table/index.tsx";
 import "./style.css";
-import EditPage, { type Field } from "../EditPage/index.tsx";
-
-// Example fields config for vendor edit
-export const vendorFields: Field[] = [
-  {
-    name: "shop_name",
-    label: "Shop Name",
-    component: "input",
-    rules: [{ required: true }],
-  },
-  { name: "name", label: "User Name", component: "input" },
-  { name: "phone_number", label: "Phone Number", component: "phone" },
-  { name: "open_time", label: "Booking Start Time", component: "timepicker" },
-  { name: "close_time", label: "Booking Close Time", component: "timepicker" },
-];
+import Button from "../../components/Button/index.tsx";
+import { FaPlus } from "react-icons/fa";
+import VendorModal from "../../components/VendorModal/index.tsx";
 
 const Vendors: React.FC = () => {
   const { vendors, count, error, isLoading } = useSelector(
@@ -38,6 +25,7 @@ const Vendors: React.FC = () => {
   const { pagination, handleTableChange } = usePagination(10, count);
 
   const [editingVendor, setEditingVendor] = useState<any | null>(null);
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
 
   const handleCloseNotification = (): void => {
     dispatch(setError(null));
@@ -75,39 +63,51 @@ const Vendors: React.FC = () => {
         limit={pagination.pageSize}
         data={record}
         onView={() => {}}
-        onUpdate={() => setEditingVendor(record)}
+        onUpdate={() => {
+          setEditingVendor(record);
+          setModalOpen(true);
+        }}
         onDelete={() =>
-          deleteVendorAction(record.id, pagination.current, pagination.pageSize)
+          deleteVendorAction(
+            record.user_id,
+            pagination.current,
+            pagination.pageSize
+          )
         }
       />
     ),
   } as unknown as ColumnType<Record<string, unknown>>);
 
-  // If editingVendor is set, show EditPage instead of table
-  if (editingVendor) {
-    return (
-      <EditPage
-        id={editingVendor.id}
-        data={editingVendor}
-        fields={vendorFields}
-        handleUpdate={(id, values) => {
-          updateVendorAction(
-            id,
-            values,
-            pagination.current,
-            pagination.pageSize
-          );
-          setEditingVendor(null); // return to table
-        }}
-        onCancel={() => setEditingVendor(null)}
-      />
-    );
-  }
-
   return (
-    <div>
+    <div className="flex flex-col">
       {contextHolder}
       {isLoading && <Spin />}
+
+      {/* Add Vendor Button */}
+      <Button
+        type="primary"
+        className="ml-auto mr-10 mt-5"
+        onClick={() => {
+          setEditingVendor(null);
+          setModalOpen(true);
+        }}
+      >
+        <span>
+          <FaPlus />
+        </span>
+        Add Vendor
+      </Button>
+
+      {/* Vendor Modal (for both add & edit) */}
+      <VendorModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        page={pagination.current}
+        limit={pagination.pageSize}
+        vendor={editingVendor} // null → Add, object → Edit
+      />
+
+      {/* Table */}
       <div className="vendor-table py-8 px-8">
         <Table
           columns={columns}

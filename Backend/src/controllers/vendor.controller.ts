@@ -4,6 +4,7 @@ import {
   getTableData,
   getUserById,
   getVendorById,
+  getVendorByUserId,
   updateTableData,
 } from "../sql";
 import { VendorProjection } from "../models/vendorModel";
@@ -75,14 +76,11 @@ const updateVendor = async (req: Request) => {
     const db = req.app.locals.db;
     const table = req.baseUrl.split("/")[2];
     const vendor_id = req.params.uuid;
-    const { shop_name, open_time, close_time, name, phone_number, user_id } =
-      req.body;
+    const { shop_name, name, phone_number, user_id } = req.body;
 
     // update vendor table
     await updateTableData(db, { id: vendor_id }, table, {
       shop_name,
-      open_time,
-      close_time,
     });
 
     await updateTableData(db, { id: user_id }, "users", { name, phone_number });
@@ -103,36 +101,67 @@ const updateVendor = async (req: Request) => {
 
 const deleteVendor = async (req: Request) => {
   try {
-    const db: PoolClient = req?.app?.locals?.db;
-    const table = req?.baseUrl?.split("/")[2]; // should resolve to "vendors"
-    const vendor_id = req?.params?.uuid;
-    const id = { id: vendor_id };
-
-    const currentVendor = await getVendorById(db, [vendor_id]);
-    if (!currentVendor || currentVendor?.length === 0) {
-      return {
-        statusCode: 400,
-        status: false,
-        message: "Invalid Vendor Id",
-      };
-    }
-
-    const response = await deleteTableData(db, id, table);
+    const db: PoolClient = req.app?.locals?.db;
+    const user_id = req.params?.uuid;
+    console.log("user_id", user_id);
+    // 2. Delete user (cascades to vendor)
+    await deleteTableData(db, { id: user_id }, "users");
 
     return {
       statusCode: 200,
       status: true,
-      data: response,
-      message: "Vendor deleted successfully",
+      message: "Vendor and associated user deleted successfully",
     };
-  } catch (err) {
+  } catch (err: any) {
     console.error("Error deleting vendor:", err);
     return {
       statusCode: 500,
       status: false,
       error: err,
+      message: "Server error",
     };
   }
 };
 
-export { getAllVendors, updateVendor, deleteVendor };
+const getVendorDetails = async (req: Request) => {
+  const db: PoolClient = req.app?.locals?.db;
+  const user_id = req.params.id; // 👈 now taking user_id
+
+  try {
+    // 🔹 Fetch vendor by user_id
+    const vendor = await getVendorByUserId(db, user_id);
+    console.log("vendor", user_id);
+    if (!vendor) {
+      return {
+        statusCode: 404,
+        status: false,
+        message: "Vendor not found for this user",
+        data: null,
+      };
+    }
+
+    // 🔹 Fetch user by id
+    const user = await getUserById(db, user_id);
+
+    const combinedData = {
+      ...vendor,
+      user: user || null,
+    };
+
+    return {
+      statusCode: 200,
+      status: true,
+      message: "Vendor details fetched successfully",
+      data: combinedData,
+    };
+  } catch (err: any) {
+    console.error("Error fetching vendor with user:", err);
+    return {
+      statusCode: 500,
+      status: false,
+      message: "Failed to fetch vendor details",
+      error: err,
+    };
+  }
+};
+export { getAllVendors, updateVendor, deleteVendor, getVendorDetails };

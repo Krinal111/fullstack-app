@@ -120,6 +120,7 @@ const updateTableData = async (
     )} WHERE ${key} = ${
       typeof value === "string" ? `'${value}'` : value
     } RETURNING *`;
+    console.log("query", query);
     const resp = await db.query(query, Object.values(tableData));
     return !resp ? null : { rows: resp.rows };
   } catch (err) {
@@ -135,6 +136,7 @@ const deleteTableData = async (db: PoolClient, id: object, table: string) => {
     let query: string = `DELETE FROM ${table} WHERE ${key} = ${
       typeof value === "string" ? `'${value}'` : `${value}`
     } RETURNING *`;
+    console.log("query:>>", query);
     const resp = await db.query(query);
     return !resp ? null : { rows: resp.rows };
   } catch (err) {

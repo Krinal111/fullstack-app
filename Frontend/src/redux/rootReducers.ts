@@ -3,6 +3,7 @@ import storage from "redux-persist/lib/storage"; // localStorage for web
 import { persistReducer, type PersistConfig } from "redux-persist";
 import authReducer from "./slices/authSlices";
 import vendorReducer from "./slices/vendorSlice";
+import vendorTimingReducer from "./slices/vendorTimingSlice";
 // ---------------- Types ----------------
 type RootState = ReturnType<typeof rootReducer>;
 
@@ -26,6 +27,7 @@ const authPersistConfig = {
 const rootReducer = combineReducers({
   auth: persistReducer(authPersistConfig, authReducer),
   vendors: vendorReducer,
+  vendorTimings: vendorTimingReducer,
 });
 
 export { rootPersistConfig, rootReducer };

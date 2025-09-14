@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Form } from "antd";
-import Button from "../components/Button";
-import PhoneField from "../components/Phonefield";
-import PasswordField from "../components/PasswordField";
+import Button from "../../components/Button";
+import PhoneField from "../../components/Phonefield";
+import PasswordField from "../../components/PasswordField";
 import { isValidPhoneNumber } from "react-phone-number-input";
-import { loginAction } from "../redux/actions/authAction";
+import { loginAction } from "../../redux/actions/authAction";
 import { useNavigate } from "react-router-dom";
 
 function Login() {
@@ -156,7 +156,7 @@ function Login() {
   );
 
   return (
-    <div className="w-full h-screen flex items-center justify-center login-main bg-secondary/60">
+    <div className="w-full h-screen flex items-center justify-center login-main">
       <div className="flex-col h-auto">
         <div className="w-full flex flex-col items-center justify-center">
           <div className="max-w-[1200px] overflow-hidden shadow-[0px_0px_20px_-11px_rgba(255,173,144,1)] flex rounded-2xl border border-primary/30">

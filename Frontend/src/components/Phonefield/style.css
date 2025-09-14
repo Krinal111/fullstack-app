@@ -5,7 +5,7 @@
 }
 
 .phone-input input {
-  padding: 4px 11px;
+  padding: 4px 11px !important;
   outline: 0;
   height: 36px;
   font-weight: 300;
