@@ -23,12 +23,7 @@ const menuItemsByRole = {
       label: route.DASHBOARD.title,
       path: route.DASHBOARD.path,
     },
-    {
-      key: route.PROFILE.path,
-      icon: <RiUser3Line />,
-      label: route.PROFILE.title,
-      path: route.PROFILE.path,
-    },
+
     {
       key: route.VENDORS.path,
       icon: <PiUsersThree />,

@@ -58,16 +58,6 @@ const ProfilePage: React.FC = () => {
     setTimings(vendorTimings || []);
   }, [vendorTimings]);
 
-  const handleAddTiming = async () => {
-    if (!id) return;
-    await addVendorTimingAction(id, {
-      day: "Monday",
-      open_time: "09:00",
-      close_time: "18:00",
-    });
-    getVendorAction(id); // refresh timings
-  };
-
   const handleEditTiming = (timing: any) => {
     setEditingTiming(timing);
     setIsModalOpen(true);
@@ -83,7 +73,7 @@ const ProfilePage: React.FC = () => {
     if (editingTiming) {
       await updateVendorTimingAction(editingTiming.id, timing);
     } else {
-      if (id) await addVendorTimingAction(id, timing);
+      if (vendor.id) await addVendorTimingAction(vendor.id, timing);
     }
     setEditingTiming(null);
     setIsModalOpen(false);

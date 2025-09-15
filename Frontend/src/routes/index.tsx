@@ -35,7 +35,7 @@ const routes: RouteObject[] = [
       {
         path: route.PROFILE.path,
         element: (
-          <RoleBasedGuard allowedRoles={["Admin", "Customer", "Vendor"]}>
+          <RoleBasedGuard allowedRoles={route.PROFILE.roles}>
             <ProfilePage />
           </RoleBasedGuard>
         ),

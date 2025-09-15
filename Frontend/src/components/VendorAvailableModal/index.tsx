@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Modal, Form, Input, Select, InputNumber } from "antd";
 
 interface VendorAvailableModalProps {
@@ -16,32 +16,42 @@ const VendorAvailableModal: React.FC<VendorAvailableModalProps> = ({
 }) => {
   const [form] = Form.useForm();
 
+  // ✅ Reset or set values whenever modal opens
+  useEffect(() => {
+    if (isModalOpen) {
+      if (initialValues) {
+        form.setFieldsValue(initialValues);
+      } else {
+        form.resetFields();
+        form.setFieldsValue({
+          meal_type: "lunch",
+          price: 0,
+          start_time: "",
+          end_time: "",
+        });
+      }
+    }
+  }, [isModalOpen, initialValues, form]);
+
   const handleOk = async () => {
     const values = await form.validateFields();
     onSave(values);
     setIsModalOpen(false);
-    form.resetFields();
+    form.resetFields(); // ✅ clear after save
   };
 
   return (
     <Modal
       title={initialValues ? "Edit Timing" : "Add Timing"}
       open={isModalOpen}
-      onCancel={() => setIsModalOpen(false)}
+      onCancel={() => {
+        setIsModalOpen(false);
+        form.resetFields(); // ✅ clear when cancel
+      }}
       onOk={handleOk}
+      destroyOnClose
     >
-      <Form
-        form={form}
-        layout="vertical"
-        initialValues={
-          initialValues || {
-            meal_type: "lunch", // ✅ lowercase
-            price: 0,
-            start_time: "",
-            end_time: "",
-          }
-        }
-      >
+      <Form form={form} layout="vertical">
         <Form.Item
           label="Meal Type"
           name="meal_type"
