@@ -41,7 +41,7 @@ function Login() {
   const renderPhoneStep = () => (
     <div className="bg-white py-12 px-10 flex flex-col justify-center">
       <div className="mb-8">
-        <h3 className="text-[24px] mb-2 text-primary text-center font-semibold">
+        <h3 className="text-[24px] mb-2 text-secondary text-center font-semibold">
           Login
         </h3>
         <p className="text-[15px] text-gray-60">

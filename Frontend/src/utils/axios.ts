@@ -1,6 +1,7 @@
 import axios from "axios";
 import { getToken } from "./localStorageHelper.ts";
 import { HOST_API } from "./config.ts";
+import { logoutAction } from "../redux/actions/authAction.ts";
 // config
 
 // ----------------------------------------------------------------------
@@ -20,10 +21,10 @@ axiosInstance.interceptors.request.use((config) => {
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
-    // if (error.response.status === 401) {
-    //   logoutAction();
-    //   return Promise.reject(error.response.data);
-    // }
+    if (error.response.status === 401) {
+      logoutAction();
+      return Promise.reject(error.response.data);
+    }
     return Promise.reject(
       (error.response && error.response.data) ||
         new Error("Something went wrong")
